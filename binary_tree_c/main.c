@@ -1,42 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <cassert>
 
-struct node_t {
+typedef struct node_t {
 	int number;
 	struct node_t* l, * r;
-};
+} node_t;
 
-struct node_t* new_node(int number) {
-	struct node_t* node_temp = (struct node_t*)malloc(sizeof(struct node_t));
-	node_temp->number = number;
-	node_temp->l = node_temp->r = NULL;
-	return node_temp;
-}
-
-// very strange logic that I don't understand now
-struct node_t* insert(struct node_t* node, int number) {
-	if (node == NULL) {
-		return new_node(number);
-	}
-
-	if (number < node->number) {
-		node->l = insert(node->l, number);
-	}
-	else if (number > node->number) {
-		node->r = insert(node->r, number);
-	}
-	return node;
-}
-
-void show(struct node_t* root) {
+void show(node_t* root) {
 	if (root != NULL) {
-		show(root->l);
 		printf("%d \n", root->number);
+		show(root->l);
 		show(root->r);
 	}
 }
 
-void delete_tree(struct node_t* root) {
+void add_node(node_t* root, int number) {
+	if (root != NULL) {
+		if (number < root->number) {
+			if (root->l != NULL) {
+				add_node(root->l, number);
+			}
+			else {
+				root->l = malloc(sizeof(node_t));
+				root->l->number = number;
+				root->l->l = root->l->r = NULL;
+				return;
+			}
+		}
+		else if (number > root->number) {
+			if (root->r != NULL) {
+				add_node(root->r, number);
+			}
+			else {
+				root->r = malloc(sizeof(node_t));
+				root->r->number = number;
+				root->r->l = root->r->r = NULL;
+				return;
+			}
+
+		}
+	}
+}
+
+void delete_tree(node_t* root) {
 	if (root != NULL) {
 		delete_tree(root->l);
 		delete_tree(root->r);
@@ -44,13 +51,23 @@ void delete_tree(struct node_t* root) {
 	}
 }
 
-void main(void) {
-	struct node_t* myTree = NULL;
+int main() {
+	node_t* myTree = malloc(sizeof(node_t));
+	myTree->number = 0;
+	myTree->l = myTree->r = NULL;
 
-	for (int i = 0; i < 5; ++i) {
-		myTree = insert(myTree, i);
+	if (myTree != NULL) {
+		for (int i = 0; i < 5; ++i) {
+			add_node(myTree, i);
+			assert(myTree != NULL);
+		}
+
+		show(myTree);
+		delete_tree(myTree);
+	}
+	else {
+		printf("myTree is NULL\n");
 	}
 
-	show(myTree);
-	delete_tree(myTree);
+	return 0;
 }
