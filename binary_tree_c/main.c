@@ -22,7 +22,7 @@ void add_node(node_t* root, int number) {
 				add_node(root->l, number);
 			}
 			else {
-				root->l = malloc(sizeof(node_t));
+				root->l = (node_t*)malloc(sizeof(node_t));
 				root->l->number = number;
 				root->l->l = root->l->r = NULL;
 				return;
@@ -33,7 +33,7 @@ void add_node(node_t* root, int number) {
 				add_node(root->r, number);
 			}
 			else {
-				root->r = malloc(sizeof(node_t));
+				root->r = (node_t*)malloc(sizeof(node_t));
 				root->r->number = number;
 				root->r->l = root->r->r = NULL;
 				return;
@@ -52,7 +52,7 @@ void delete_tree(node_t* root) {
 }
 
 int main() {
-	node_t* myTree = malloc(sizeof(node_t));
+	node_t* myTree = (node_t*)malloc(sizeof(node_t));
 	myTree->number = 0;
 	myTree->l = myTree->r = NULL;
 
