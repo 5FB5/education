@@ -39,6 +39,14 @@ void add_node(node_t* list, int number) {
 	}
 }
 
+int pop_front(node_t** list) {
+	node_t* tmp = *list;
+	int num = tmp->number;
+	(*list) = (*list)->next_node_ptr;
+	free(tmp);
+	return num;
+}
+
 int value_at(node_t* list, int index) {
 	node_t* current_node = list;
 
@@ -72,7 +80,7 @@ void free_list(node_t* list) {
 
 void show_list(node_t* list) {
 	if (list != NULL) {
-		printf("%d\n", list->number);
+		printf("\n%d", list->number);
 		show_list(list->next_node_ptr);
 	}
 }
@@ -89,9 +97,14 @@ int main() {
 	add_node_front(myList, 9);
 
 	show_list(myList);
-	printf("\nList's size: %d", size(myList));
 
+	printf("\nList's size: %d", size(myList));
 	printf(empty(myList) == true ? "\nList is empty!" : "\nList isn't empty!");
+	printf("\nValue at 3 node is: %d", value_at(myList, 3));
+
+	pop_front(&myList);
+
+	show_list(myList);
 
 	printf("\nValue at 3 node is: %d", value_at(myList, 3));
 
