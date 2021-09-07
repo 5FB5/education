@@ -40,10 +40,8 @@ void add_node(node_t* list, int number) {
 }
 
 int pop_front(node_t** list) {
-	node_t* tmp = *list;
-	int num = tmp->number;
+	int num = (*list)->number;
 	(*list) = (*list)->next_node_ptr;
-	free(tmp);
 	return num;
 }
 
