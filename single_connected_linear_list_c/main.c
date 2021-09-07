@@ -45,6 +45,21 @@ int pop_front(node_t** list) {
 	return num;
 }
 
+int pop_back(node_t** list) {
+	int num = 0;
+	node_t* current_node = (*list);
+
+	while (current_node->next_node_ptr != NULL) {
+		if (current_node->next_node_ptr->next_node_ptr == NULL) {
+			num = current_node->next_node_ptr->number;
+			current_node->next_node_ptr = NULL;
+		}
+		else {
+			current_node = current_node->next_node_ptr;
+		}
+	}
+}
+
 int value_at(node_t* list, int index) {
 	node_t* current_node = list;
 
@@ -105,6 +120,10 @@ int main() {
 	show_list(myList);
 
 	printf("\nValue at 3 node is: %d", value_at(myList, 3));
+
+	pop_back(&myList);
+
+	show_list(myList);
 
 	free_list(myList);
 
