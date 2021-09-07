@@ -91,12 +91,7 @@ int main() {
 	show_list(myList);
 	printf("\nList's size: %d", size(myList));
 
-	if (empty(myList) == true) {
-		printf("\nList is empty!");
-	}
-	else {
-		printf("\nList isn't empty!");
-	}
+	printf(empty(myList) == true ? "\nList is empty!" : "\nList isn't empty!");
 
 	printf("\nValue at 3 node is: %d", value_at(myList, 3));
 
