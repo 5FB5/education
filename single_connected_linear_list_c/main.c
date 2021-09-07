@@ -6,18 +6,28 @@
 
 typedef struct node_t {
 	int number;
-	int id;
 	struct node_t* next_node_ptr;
 } node_t;
 
 int list_counter = 0;
+
+void add_node_front(node_t* list, int number) {
+	if (list != NULL) {
+		node_t* node_front = (node_t*)malloc(sizeof(node_t));
+		node_front->number = number;
+		node_front->next_node_ptr = list->next_node_ptr; // change head's pointer to a new node and set new node's pointer from head
+		list->next_node_ptr = node_front;
+
+		assert(node_front != NULL);
+		list_counter++;
+	}
+}
 
 void add_node(node_t* list, int number) {
 	if (list != NULL) {
 		if (list->next_node_ptr == NULL) {
 			list->next_node_ptr = (node_t*)malloc(sizeof(node_t));
 			list->next_node_ptr->number = number;
-			list->next_node_ptr->id = list_counter;
 			list->next_node_ptr->next_node_ptr = NULL;
 
 			assert(list->next_node_ptr != NULL);
@@ -29,19 +39,24 @@ void add_node(node_t* list, int number) {
 	}
 }
 
-int value_at(node_t* list, int n) {
-	if (list != NULL) {
-		if (list->id == n) {
-			return list->number;
+int value_at(node_t* list, int index) {
+	node_t* current_node = list;
+
+	int counter = 0;
+
+	while (current_node != NULL) {
+		if (counter == index) {
+			return current_node->number;
 		}
-		else {
-			value_at(list->next_node_ptr, n);
-		}
+
+		counter++;
+		current_node = current_node->next_node_ptr;
 	}
+
 }
 
 bool empty(node_t* list) {
-	return list != NULL ? false : true;
+	return list == NULL ? true : false;
 }
 
 int size(node_t* list) {
@@ -65,12 +80,13 @@ void show_list(node_t* list) {
 int main() {
 	node_t* myList = (node_t*)malloc(sizeof(node_t));
 	myList->number = 0;
-	myList->id = 0;
 	myList->next_node_ptr = NULL;
 
 	for (int i = 1; i < 6; ++i) {
 		add_node(myList, i);
 	}
+
+	add_node_front(myList, 9);
 
 	show_list(myList);
 	printf("\nList's size: %d", size(myList));
