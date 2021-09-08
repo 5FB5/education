@@ -40,8 +40,10 @@ void add_node(node_t* list, int number) {
 }
 
 int pop_front(node_t** list) {
+	node_t* tmp_list = (*list)->next_node_ptr;
 	int num = (*list)->number;
-	(*list) = (*list)->next_node_ptr;
+	free(*list);
+	(*list) = tmp_list;
 	return num;
 }
 
@@ -52,12 +54,15 @@ int pop_back(node_t** list) {
 	while (current_node->next_node_ptr != NULL) {
 		if (current_node->next_node_ptr->next_node_ptr == NULL) {
 			num = current_node->next_node_ptr->number;
+			free(current_node->next_node_ptr->next_node_ptr);
 			current_node->next_node_ptr = NULL;
 		}
 		else {
 			current_node = current_node->next_node_ptr;
 		}
 	}
+
+	return num;
 }
 
 int value_at(node_t* list, int index) {
@@ -92,9 +97,12 @@ void free_list(node_t* list) {
 }
 
 void show_list(node_t* list) {
-	if (list != NULL) {
-		printf("\n%d", list->number);
-		show_list(list->next_node_ptr);
+	node_t* current_node = list;
+
+	printf("\nPrinting list... ");
+	while (current_node != NULL) {
+		printf("\n%d", current_node->number);
+		current_node = current_node->next_node_ptr;
 	}
 }
 
