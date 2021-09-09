@@ -25,29 +25,38 @@ void add_node_front(node_t* list, int number) {
 
 void add_node(node_t* list, int number) {
 	if (list != NULL) {
-		if (list->next_node_ptr == NULL) {
-			list->next_node_ptr = (node_t*)malloc(sizeof(node_t));
-			list->next_node_ptr->number = number;
-			list->next_node_ptr->next_node_ptr = NULL;
+		// find NULL node
+		while (list->next_node_ptr != NULL) {
+			list = list->next_node_ptr;
+			continue;
+		}
 
-			assert(list->next_node_ptr != NULL);
-			list_counter++;
-		}
-		else {
-			add_node(list->next_node_ptr, number);
-		}
+		// create new node
+		list->next_node_ptr = (node_t*)malloc(sizeof(node_t));
+		list->next_node_ptr->number = number;
+		list->next_node_ptr->next_node_ptr = NULL;
+
+		assert(list->next_node_ptr != NULL);
+		list_counter++;
+
 	}
 }
 
 int pop_front(node_t** list) {
+	printf("\npop_front()...");
+
 	node_t* tmp_list = (*list)->next_node_ptr;
 	int num = (*list)->number;
+	
 	free(*list);
+	
 	(*list) = tmp_list;
+	
 	return num;
 }
 
 int pop_back(node_t** list) {
+	printf("\npop_back()");
 	int num = 0;
 	node_t* current_node = (*list);
 
@@ -85,15 +94,20 @@ bool empty(node_t* list) {
 	return list == NULL ? true : false;
 }
 
-int size(node_t* list) {
-	return list_counter;
+int size() {
+	return ++list_counter;
 }
 
-void free_list(node_t* list) {
-	if (list != NULL) {
-		free_list(list->next_node_ptr);
-		free(list);
+void free_list(node_t** list) {
+	node_t* current_node = (*list);
+
+	while ((*list) != NULL) {
+		current_node = (*list);
+		(*list) = (*list)->next_node_ptr;
+		free(current_node);
 	}
+
+	printf("\nfree_list()");
 }
 
 void show_list(node_t* list) {
@@ -119,9 +133,11 @@ int main() {
 
 	show_list(myList);
 
-	printf("\nList's size: %d", size(myList));
+	printf("\nList's size: %d", size());
 	printf(empty(myList) == true ? "\nList is empty!" : "\nList isn't empty!");
 	printf("\nValue at 3 node is: %d", value_at(myList, 3));
+
+	printf("\n______________________");
 
 	pop_front(&myList);
 
@@ -133,7 +149,7 @@ int main() {
 
 	show_list(myList);
 
-	free_list(myList);
+	free_list(&myList);
 
 	return 0;
 }
