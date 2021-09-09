@@ -28,7 +28,6 @@ void add_node(node_t* list, int number) {
 		// find NULL node
 		while (list->next_node_ptr != NULL) {
 			list = list->next_node_ptr;
-			continue;
 		}
 
 		// create new node
